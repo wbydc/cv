@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  cv:
+    build:
+      context: ./../../
+      dockerfile: ./ops/docker/Dockerfile
+    container_name: cv
+    ports:
+      - "3000:80"
+    volumes:
+      - ../../data/data.json:/app/data.json
+      - ../../data/photo.jpg:/app/photo.jpg
+    restart: unless-stopped

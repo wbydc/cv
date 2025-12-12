@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-config
+data:
+  # Read data.json as text
+  data.json: |
+{{ .Files.Get "data.json" | indent 4 }}
+
+binaryData:
+  # Read photo.jpg as binary and base64 encode it
+  photo.jpg: {{ .Files.Get "photo.jpg" | b64enc }}
