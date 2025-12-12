@@ -1,0 +1,27 @@
+{{- if and .Values.ingress.enabled (eq .Values.ingress.type "traefik-crd") -}}
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    app: {{ .Release.Name }}
+  {{- with .Values.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  entryPoints:
+    {{- toYaml .Values.traefikCRD.entryPoints | nindent 4 }}
+  routes:
+  {{- range .Values.ingress.hosts }}
+    - match: Host(`{{ .host }}`)
+      kind: Rule
+      services:
+        - name: {{ $.Release.Name }}
+          port: {{ $.Values.service.port }}
+  {{- end }}
+  {{- if .Values.traefikCRD.tls.secretName }}
+  tls:
+    secretName: {{ .Values.traefikCRD.tls.secretName }}
+  {{- end }}
+{{- end }}

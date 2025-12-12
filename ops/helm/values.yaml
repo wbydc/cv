@@ -9,8 +9,39 @@ service:
 
 resources:
   limits:
-    cpu: 100m
-    memory: 128Mi
+    cpu: 20m
+    memory: 8Mi
   requests:
-    cpu: 100m
-    memory: 128Mi
+    cpu: 20m
+    memory: 8Mi
+
+# Placeholders for dynamic data injection  
+cvData:  
+  json: ""        # Content of data.json  
+  photoBase64: "" # Base64 encoded content of photo.jpg
+
+ingress:
+  enabled: false
+  # type can be "standard" (for Nginx/Traefik Ingress) or "traefik-crd" (for IngressRoute)
+  type: standard 
+  className: "" # e.g., "nginx" or "traefik" (only for standard ingress)
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - host: cv.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - cv.example.com
+
+traefikCRD:
+  # Specific settings for Traefik IngressRoute
+  entryPoints: 
+    - web
+    - websecure
+  tls: 
+    secretName: "" # Leave empty if not using TLS or using default

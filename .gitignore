@@ -1,2 +1,11 @@
-data/photo.jpg
-data/data.json
+# Data files
+./data/photo.jpg
+./data/data.json
+
+# Build files
+./cv
+./values.yaml
+
+# Local files
+.local
+.megaignore

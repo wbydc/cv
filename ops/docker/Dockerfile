@@ -17,7 +17,7 @@ COPY . .
 
 # Build the Go app
 # CGO_ENABLED=0 creates a statically linked binary
-RUN CGO_ENABLED=0 GOOS=linux go build -o cv-generator .
+RUN CGO_ENABLED=0 GOOS=linux go build -o cv .
 
 # Stage 2: Run the application
 FROM alpine:latest
@@ -25,10 +25,10 @@ FROM alpine:latest
 WORKDIR /app/
 
 # Copy the binary from the builder stage
-COPY --from=builder /app/cv-generator .
+COPY --from=builder /app/cv .
 
 # Expose port 80 to the outside world
 EXPOSE 80
 
 # Command to run the executable
-CMD ["./cv-generator"]
+CMD ["./cv"]
