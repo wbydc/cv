@@ -1,10 +1,10 @@
 # Data files
-./data/photo.jpg
-./data/data.json
+data/photo.jpg
+data/data.json
 
 # Build files
-./cv
-./values.yaml
+cv
+values.yaml
 
 # Local files
 .local

@@ -13,9 +13,6 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}
-      annotations:
-        # This checksum triggers a restart if data.json or photo.jpg changes
-        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
     spec:
       containers:
         - name: {{ .Chart.Name }}
@@ -23,18 +20,27 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: 80
+              containerPort: {{ .Values.appConfig.port }}
               protocol: TCP
+          
+          # Load Environment Variables from ConfigMap
+          envFrom:
+            - configMapRef:
+                name: {{ .Release.Name }}-env
+
+          # Mount the Persistent Volume
           volumeMounts:
-            - name: config-volume
-              mountPath: /app/data.json
-              subPath: data.json
-            - name: config-volume
-              mountPath: /app/photo.jpg
-              subPath: photo.jpg
+            - name: data-storage
+              mountPath: {{ .Values.appConfig.mountPath }}
+          
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+      
       volumes:
-        - name: config-volume
-          configMap:
-            name: {{ .Release.Name }}-config
+        - name: data-storage
+          {{- if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-pvc
+          {{- else }}
+          emptyDir: {}
+          {{- end }}

@@ -1,18 +1,11 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Release.Name }}-config
-
+  name: {{ .Release.Name }}-env
+  labels:
+    app: {{ .Release.Name }}
 data:
-  data.json: |
-    {{- if .Values.cvData.json }}
-    {{ .Values.cvData.json }}
-    {{- else }}
-    {{ .Files.Get "data.json" | indent 4 }}
-    {{- end }}
-
-binaryData:
-  # Logic:
-  # 1. If photoBase64 is provided via flags, use it directly.
-  # 2. Else, look for photo.jpg in the chart and base64 encode it.
-  photo.jpg: {{ if .Values.cvData.photoBase64 }}{{ .Values.cvData.photoBase64 }}{{ else }}{{ .Files.Get "photo.jpg" | b64enc }}{{ end }}
+  DATA_FILE_PATH: {{ .Values.appConfig.dataPath }}
+  PHOTO_FILE_PATH: {{ .Values.appConfig.photoPath }}
+  OUTPUT_FILE_PATH: {{ .Values.appConfig.outputPath }}
+  SERVER_PORT: {{ .Values.appConfig.port | quote }}

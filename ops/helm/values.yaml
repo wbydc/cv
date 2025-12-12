@@ -15,10 +15,24 @@ resources:
     cpu: 20m
     memory: 8Mi
 
-# Placeholders for dynamic data injection  
-cvData:  
-  json: ""        # Content of data.json  
-  photoBase64: "" # Base64 encoded content of photo.jpg
+persistence:
+  enabled: true
+  size: 1Gi
+  # storageClass: "standard" # Uncomment to specify a class, otherwise uses default
+  accessMode: ReadWriteOnce
+
+appConfig:
+  # Where files will be stored inside the container
+  mountPath: /data
+  dataPath: /data/data.json
+  photoPath: /data/photo.jpg
+  outputPath: /data/cv.html
+  port: "80"
+
+# Initial data to seed the PVC with
+cvData:
+  json: ""
+  photoBase64: ""
 
 ingress:
   enabled: false

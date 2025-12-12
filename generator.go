@@ -63,9 +63,9 @@ func GenerateCV() {
 	log.Println("🔄 Regenerating CV...")
 
 	// 1. Read Data
-	jsonData, err := os.ReadFile(DataFilename)
+	jsonData, err := os.ReadFile(DataFilePath)
 	if err != nil {
-		log.Printf("Error reading %s: %v", DataFilename, err)
+		log.Printf("Error reading %s: %v", DataFilePath, err)
 		return
 	}
 
@@ -76,7 +76,7 @@ func GenerateCV() {
 	}
 
 	// 2. Read Photo
-	photoBase64 := getImageAsBase64(PhotoFilename)
+	photoBase64 := getImageAsBase64(PhotoFilePath)
 
 	// 3. Process Data
 	emailEncoded := base64.StdEncoding.EncodeToString([]byte(cvData.Email))
@@ -111,7 +111,7 @@ func GenerateCV() {
 		return
 	}
 
-	outputFile, err := os.Create(OutputFilename)
+	outputFile, err := os.Create(OutputFilePath)
 	if err != nil {
 		log.Printf("Error creating output file: %v", err)
 		return

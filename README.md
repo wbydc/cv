@@ -19,8 +19,9 @@ For helm chart configuration refer to [values.yaml](./ops/helm/values.yaml)
 ```
 helm upgrade --install \
   -f values.yaml \
-  --set-file cvData.json=./data/data.json \
-  --set cvData.photoBase64=$(base64 -w0 ./data/photo.jpg) \
   cv ./ops/helm \
-  -n cv 
+  -n cv
+
+kubectl cp ./data/data.json <pod-name>:/data/data.json  
+kubectl cp ./data/photo.jpg <pod-name>:/data/photo.jpg
 ```

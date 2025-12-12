@@ -29,14 +29,14 @@ func StartServer() {
 				if !ok {
 					return
 				}
-				// Check if the event is a Write (save) operation
 				if event.Op&fsnotify.Write == fsnotify.Write {
-					// Check if the modified file is one we care about
-					// We use filepath.Base to handle paths correctly
-					fileName := filepath.Base(event.Name)
-					if fileName == DataFilename || fileName == PhotoFilename {
-						log.Printf("Detected change in %s", fileName)
-						// Small delay to ensure file write is complete (editors can be atomic)
+					// Check absolute paths to ensure we match correctly
+					absEventName, _ := filepath.Abs(event.Name)
+					absDataPath, _ := filepath.Abs(DataFilePath)
+					absPhotoPath, _ := filepath.Abs(PhotoFilePath)
+
+					if absEventName == absDataPath || absEventName == absPhotoPath {
+						log.Printf("Detected change in %s", event.Name)
 						time.Sleep(100 * time.Millisecond)
 						GenerateCV()
 					}
@@ -50,8 +50,10 @@ func StartServer() {
 		}
 	}()
 
-	// Watch the current directory
-	err = watcher.Add(".")
+	// Watch the directory containing the data file
+	dataDir := filepath.Dir(DataFilePath)
+	log.Printf("👀 Watching directory: %s", dataDir)
+	err = watcher.Add(dataDir)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -59,12 +61,12 @@ func StartServer() {
 	// 3. Setup HTTP Server
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		// Serve the generated file
-		http.ServeFile(w, r, OutputFilename)
+		http.ServeFile(w, r, OutputFilePath)
 	})
 
 	fmt.Printf("\n🚀 Server started!\n")
 	fmt.Printf("👉 Go to http://localhost%s to view your CV\n", ServerPort)
-	fmt.Printf("👀 Watching for changes in %s and %s...\n\n", DataFilename, PhotoFilename)
+	fmt.Printf("👀 Watching for changes in %s and %s...\n\n", DataFilePath, PhotoFilePath)
 
 	log.Fatal(http.ListenAndServe(ServerPort, nil))
 }
