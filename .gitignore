@@ -4,7 +4,9 @@ data/data.json
 
 # Build files
 cv
+!cmd/cv
 values.yaml
+!ops/helm/values.yaml
 
 # Local files
 .local
