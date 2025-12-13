@@ -17,7 +17,7 @@ const HTMLTemplate = `
       --bg-color: #fff;
       --sidebar-bg: #f4f7f6;
       --border-color: #e0e0e0;
-    
+
       /* Sizing Variables (Screen) */
       --base-font-size: 16px;
       --header-font-size: 2.5rem;
@@ -28,7 +28,7 @@ const HTMLTemplate = `
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-  
+
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       font-size: var(--base-font-size);
@@ -138,6 +138,14 @@ const HTMLTemplate = `
       break-after: avoid;
     }
 
+    /* About Section */
+    .about-text {
+      margin-bottom: 15px;
+      line-height: 1.3;
+      color: var(--text-color);
+      font-size: 0.9rem;
+    }
+
     /* Job Cards */
     .job-card {
       margin-bottom: var(--job-margin);
@@ -183,7 +191,7 @@ const HTMLTemplate = `
       font-size: 0.95rem;
       line-height: 1.5;
     }
-  
+
     .job-achievements {
       margin-left: 20px;
     }
@@ -208,6 +216,29 @@ const HTMLTemplate = `
       font-size: 0.75rem;
       font-weight: 500;
       white-space: nowrap;
+    }
+
+    /* Education Section */
+    .edu-card {
+      margin-bottom: 15px;
+      break-inside: avoid;
+    }
+
+    .edu-degree {
+      font-weight: bold;
+      color: var(--primary-color);
+      font-size: 1rem;
+    }
+
+    .edu-institution {
+      font-weight: 600;
+      color: var(--text-color);
+      font-size: 0.9rem;
+    }
+
+    .edu-details {
+      font-size: 0.85rem;
+      color: var(--light-text);
     }
 
     /* Floating Download Button */
@@ -283,7 +314,7 @@ const HTMLTemplate = `
         -webkit-print-color-adjust: exact;
         border: 1px solid #ddd;
       }
-    
+
       .photo-container {
         width: 100px;
         height: 100px;
@@ -291,7 +322,7 @@ const HTMLTemplate = `
 
       .job-description { line-height: 1.25; }
       .contact-item { line-height: 1.2; }
-    
+
       * { hyphens: none !important; }
     }
   </style>
@@ -318,7 +349,7 @@ const HTMLTemplate = `
 
       <div class="contact-section">
         <h4>Contact</h4>
-       
+ 
         <div class="contact-item">
           <span class="label">Email</span>
           <span class="protected-data" data-type="email" data-value="{{ .EmailEncoded }}">
@@ -369,6 +400,15 @@ const HTMLTemplate = `
         {{ end }}
       </header>
 
+      {{ if .About }}
+      <section>
+        <h2 class="section-title">About Me</h2>
+        <div class="about-text">
+          {{ .About }}
+        </div>
+      </section>
+      {{ end }}
+
       <section>
         <h2 class="section-title">Experience</h2>
         {{ range .Experience }}
@@ -397,17 +437,32 @@ const HTMLTemplate = `
         </div>
         {{ end }}
       </section>
+
+      {{ if .Education }}
+      <section>
+        <h2 class="section-title">Education</h2>
+        {{ range .Education }}
+        <div class="edu-card">
+          <div class="edu-degree">{{ .Degree }}</div>
+          <div class="edu-institution">{{ .Institution }}</div>
+          <div class="edu-details">
+            {{ .StartDate }} – {{ .EndDate }} • {{ .Location }}
+          </div>
+        </div>
+        {{ end }}
+      </section>
+      {{ end }}
     </main>
   </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const protectedElements = document.querySelectorAll('.protected-data');
-      
+
       protectedElements.forEach(el => {
         const type = el.getAttribute('data-type');
         const encoded = el.getAttribute('data-value');
-        
+
         if (encoded) {
           try {
             const decoded = atob(encoded);

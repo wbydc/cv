@@ -5,7 +5,7 @@ services:
       dockerfile: ./ops/docker/Dockerfile
     container_name: cv
     ports:
-      - "8080:80"
+      - "8000:80"
     volumes:
       - ../../data/data.json:/app/data.json
       - ../../data/photo.jpg:/app/photo.jpg

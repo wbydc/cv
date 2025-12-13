@@ -16,15 +16,26 @@ type Experience struct {
 	Skills       []string `json:"skills"`
 }
 
+// Education represents a single education entry
+type Education struct {
+	Institution string `json:"institution"`
+	Degree      string `json:"degree"`
+	StartDate   string `json:"startDate"`
+	EndDate     string `json:"endDate"`
+	Location    string `json:"location"`
+}
+
 // CVData represents the root JSON structure
 type CVData struct {
 	Name       string            `json:"name"`
 	Email      string            `json:"email"`
 	Phone      string            `json:"phone"`
 	Location   string            `json:"location"`
+	About      string            `json:"about"`
 	Socials    map[string]string `json:"socials"`
 	Languages  map[string]string `json:"languages"`
 	Experience []Experience      `json:"experience"`
+	Education  []Education       `json:"education"`
 }
 
 // TemplateContext is used to pass data to the HTML template
