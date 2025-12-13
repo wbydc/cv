@@ -13,7 +13,8 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 # Copy the source code
-COPY . .
+COPY cmd/ ./cmd/
+COPY internal/ ./internal/
 
 # Build the Go app
 # CGO_ENABLED=0 creates a statically linked binary
