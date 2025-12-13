@@ -1,4 +1,4 @@
-package main
+package internal
 
 const HTMLTemplate = `
 <!DOCTYPE html>
@@ -17,7 +17,7 @@ const HTMLTemplate = `
       --bg-color: #fff;
       --sidebar-bg: #f4f7f6;
       --border-color: #e0e0e0;
-      
+    
       /* Sizing Variables (Screen) */
       --base-font-size: 16px;
       --header-font-size: 2.5rem;
@@ -28,7 +28,7 @@ const HTMLTemplate = `
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    
+  
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       font-size: var(--base-font-size);
@@ -183,7 +183,7 @@ const HTMLTemplate = `
       font-size: 0.95rem;
       line-height: 1.5;
     }
-    
+  
     .job-achievements {
       margin-left: 20px;
     }
@@ -283,7 +283,7 @@ const HTMLTemplate = `
         -webkit-print-color-adjust: exact;
         border: 1px solid #ddd;
       }
-      
+    
       .photo-container {
         width: 100px;
         height: 100px;
@@ -291,20 +291,20 @@ const HTMLTemplate = `
 
       .job-description { line-height: 1.25; }
       .contact-item { line-height: 1.2; }
-      
+    
       * { hyphens: none !important; }
     }
   </style>
 </head>
 <body>
-  <!-- Floating Download Button -->  
-  <div class="download-btn-container no-print">  
-    <button class="download-btn" onclick="window.print()">  
-      <svg viewBox="0 0 24 24">  
-        <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>  
-      </svg>  
-      Save as PDF  
-    </button>  
+  <!-- Floating Download Button -->
+  <div class="download-btn-container no-print">
+    <button class="download-btn" onclick="window.print()">
+      <svg viewBox="0 0 24 24">
+        <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+      </svg>
+      Save as PDF
+    </button>
   </div>
 
   <div class="page">
@@ -318,19 +318,19 @@ const HTMLTemplate = `
 
       <div class="contact-section">
         <h4>Contact</h4>
-         
-        <div class="contact-item">  
-          <span class="label">Email</span>  
-          <span class="protected-data" data-type="email" data-value="{{ .EmailEncoded }}">  
-            [Protected]  
-          </span>  
-        </div>  
-  
-        <div class="contact-item">  
-          <span class="label">Phone</span>  
-          <span class="protected-data" data-type="phone" data-value="{{ .PhoneEncoded }}">  
-            [Protected]  
-          </span>  
+       
+        <div class="contact-item">
+          <span class="label">Email</span>
+          <span class="protected-data" data-type="email" data-value="{{ .EmailEncoded }}">
+            [Protected]
+          </span>
+        </div>
+
+        <div class="contact-item">
+          <span class="label">Phone</span>
+          <span class="protected-data" data-type="phone" data-value="{{ .PhoneEncoded }}">
+            [Protected]
+          </span>
         </div>
 
         <div class="contact-item">
@@ -352,9 +352,9 @@ const HTMLTemplate = `
       <div class="contact-section">
         <h4>Languages</h4>
         {{ range $lang, $level := .Languages }}
-        <div class="contact-item">  
-          <span class="label">{{ $lang }}</span>  
-          {{ $level }}  
+        <div class="contact-item">
+          <span class="label">{{ $lang }}</span>
+          {{ $level }}
         </div>
         {{ end }}
       </div>
@@ -400,28 +400,28 @@ const HTMLTemplate = `
     </main>
   </div>
 
-  <script>  
-    document.addEventListener('DOMContentLoaded', () => {  
-      const protectedElements = document.querySelectorAll('.protected-data');  
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const protectedElements = document.querySelectorAll('.protected-data');
+      
+      protectedElements.forEach(el => {
+        const type = el.getAttribute('data-type');
+        const encoded = el.getAttribute('data-value');
         
-      protectedElements.forEach(el => {  
-        const type = el.getAttribute('data-type');  
-        const encoded = el.getAttribute('data-value');  
-          
-        if (encoded) {  
-          try {  
-            const decoded = atob(encoded);  
-            if (type === 'email') {  
-              el.innerHTML = '<a href="mailto:' + decoded + '">' + decoded + '</a>';  
-            } else if (type === 'phone') {  
-              el.innerHTML = '<a href="tel:' + decoded + '">' + decoded + '</a>';  
-            }  
-          } catch (e) {  
-            console.error('Failed to decode contact info');  
-          }  
-        }  
-      });  
-    });  
+        if (encoded) {
+          try {
+            const decoded = atob(encoded);
+            if (type === 'email') {
+              el.innerHTML = '<a href="mailto:' + decoded + '">' + decoded + '</a>';
+            } else if (type === 'phone') {
+              el.innerHTML = '<a href="tel:' + decoded + '">' + decoded + '</a>';
+            }
+          } catch (e) {
+            console.error('Failed to decode contact info');
+          }
+        }
+      });
+    });
   </script>
 </body>
 </html>

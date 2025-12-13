@@ -17,7 +17,7 @@ COPY . .
 
 # Build the Go app
 # CGO_ENABLED=0 creates a statically linked binary
-RUN CGO_ENABLED=0 GOOS=linux go build -o cv .
+RUN CGO_ENABLED=0 GOOS=linux go build -o cv ./cmd/cv
 
 # Stage 2: Run the application
 FROM alpine:latest

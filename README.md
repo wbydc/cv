@@ -4,7 +4,7 @@ Generates and serves CV from provided data.json and photo.jpg. Auto updates gene
 
 ## Usage
 
-Put your [experience](./types.go) and photo into data folder, then run 
+Put your [experience](./internal/types.go) and photo into data folder, then run 
 
 ### Docker
 
